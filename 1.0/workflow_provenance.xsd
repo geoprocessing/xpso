@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:ows="http://www.opengis.net/ows/2.0" 
+	xmlns:prov="http://www.w3.org/ns/prov#" 
+	xmlns:wps="http://www.opengis.net/wps/2.0"
+	xmlns:xpso="http://geos.whu.edu.cn/xpso/1.0" 
+	targetNamespace="http://geos.whu.edu.cn/xpso/1.0" xml:lang="en" version="1.0.0">
+	
+	<annotation>
+		<documentation>
+			Workflow languange for spatial domain.
+		</documentation>
+	</annotation>
+	
+	<import namespace="http://www.w3.org/ns/prov#" schemaLocation="prov-core.xsd"/>
+	<import namespace="http://www.opengis.net/wps/2.0" schemaLocation="http://schemas.opengis.net/wps/2.0/wps.xsd"/>
+	<import namespace="http://www.opengis.net/ows/2.0" schemaLocation="http://schemas.opengis.net/ows/2.0/owsAll.xsd"/>
+	<include schemaLocation="workflow_instance.xsd"/>
+	<element name="ProcessExec" type="xpso:ProcessExecType" substitutionGroup="prov:activity"/>
+	<element name="WorkflowExec" type="xpso:WorkflowExecType" substitutionGroup="prov:activity"/>
+	<element name="WorkflowExecInfo" type="xpso:WorkflowExecInfoType"/>
+	<element name="Dataset" type="xpso:DatasetType" substitutionGroup="prov:entity"/>
+	<complexType name="ProcessExecType">
+		<complexContent>
+			<extension base="prov:Activity">
+				<sequence>
+					<element name="Successed">
+						<simpleType>
+							<restriction base="xs:boolean"/>
+					</simpleType>
+			</element>
+					</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<complexType name="WorkflowExecType">
+		<complexContent>
+			<extension base="xpso:ProcessExecType"/>
+		</complexContent>
+	</complexType>
+
+	<complexType name="WorkflowExecInfoType">
+		<annotation>
+			<documentation>
+				Describe the whole workflow
+			</documentation>
+		</annotation>
+		<sequence>
+			<element ref="xpso:WorkflowExec" minOccurs="1" maxOccurs="1"/>
+			<element ref="xpso:ProcessExec" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="xpso:Dataset" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="prov:used" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="prov:wasGeneratedBy" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="prov:plan" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="prov:wasAssociatedWith" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="prov:wasDerivedFrom" minOccurs="0" maxOccurs="unbounded"/>
+			<element ref="xpso:WorkflowInstance" minOccurs="0" maxOccurs="1"/>
+		</sequence>	
+		<xs:attribute ref="prov:id"/>
+	</complexType>
+	<complexType name="DatasetType">
+		<complexContent>
+			<extension base="prov:Entity">
+				<annotation>
+					<documentation>
+						In this use, the DescriptionType shall describe a workflow instance.
+					</documentation>
+				</annotation>
+				<choice>
+						<element ref="wps:Data"/>
+						<element ref="wps:Reference"/>
+					</choice>
+				
+			</extension>
+		</complexContent>
+	</complexType>
+</schema>
